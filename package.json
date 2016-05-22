@@ -1,0 +1,29 @@
+{
+  "name": "generator-grunt-awesome-plugin",
+  "version": "0.1.0",
+  "description": "A Yeoman generator for Grunt plugin, the awesome way",
+  "files": [
+    "app"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krampstudio/generator-grunt-awesome-plugin.git"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "yeoman",
+    "generator",
+    "grunt",
+    "gruntplugin",
+    "yo"
+  ],
+  "author": "Bertrand Chevrier <chevrier.bertrand@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krampstudio/generator-grunt-awesome-plugin/issues"
+  },
+  "homepage": "https://github.com/krampstudio/generator-grunt-awesome-plugin#readme",
+  "dependencies": {
+    "yeoman-generator": "^0.23.3"
+  }
+}
