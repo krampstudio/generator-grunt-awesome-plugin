@@ -1,0 +1,22 @@
+{
+  "name": "<%=name%>",
+  "version": "<%=version%>",
+  "description": "<%=description%>",
+  "keywords": [
+    "gruntplugin"
+  ],
+  "main": "Gruntfile.js",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "grunt": "~0.4.5",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-connect": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-eslint": "^18.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
