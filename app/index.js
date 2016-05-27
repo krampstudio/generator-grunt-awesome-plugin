@@ -46,7 +46,7 @@ module.exports = generators.Base.extend({
             self.props = answers;
             self.props.taskName = self.props.name.replace(/^grunt-/i, '');
 
-            this.log('Creating grunt plugin ' + self.props.name);
+            self.log('Creating grunt plugin ' + self.props.name);
         });
     },
     writing: {
