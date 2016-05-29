@@ -9,45 +9,116 @@ module.exports = generators.Base.extend({
 
         generators.Base.apply(this, arguments);
     },
-    prompting: function prompting() {
-        var self = this;
-        return this.prompt([{
-            type: 'input',
-            name: 'name',
-            message: 'Your Grunt plugin name',
-            default: normalizeName(this.appname),
-            validate : function(input){
-                if(/^grunt-contrib/i.test(input)){
-                    return "Hum, grunt-contrib plugins names are reserved for the Grunt core team, sorry";
+    prompting: {
+        packageProps : function packageProps() {
+            var self = this;
+            return this.prompt([{
+                type: 'input',
+                name: 'name',
+                message: 'Your Grunt plugin name',
+                default: normalizeName(this.appname),
+                validate : function(input){
+                    if(/^grunt-contrib/i.test(input)){
+                        return "Hum, grunt-contrib plugins names are reserved for the Grunt core team, sorry";
+                    }
+                    if(/^grunt-contrib/i.test(input)){
+                        return "By convention Grunt plugins starts with 'grunt-'";
+                    }
+                    return true;
+                },
+                filter : normalizeName
+            }, {
+                type: 'input',
+                name: 'description',
+                message: 'The plugin description',
+                default: 'The best Grunt plugin'
+            }, {
+                type: 'input',
+                name: 'version',
+                message: 'The plugin version',
+                default: '0.1.0'
+            }, {
+                type: 'list',
+                name: 'gruntVersion',
+                message: 'The version of Grunt',
+                default: '1.0.0',
+                choices : ['1.0.0', '0.4.5']
+            }, {
+                type: 'input',
+                name: 'keywords',
+                message: 'Plugin keywords',
+                filter: function (words) {
+                    return words.split(/\s*,\s*/g);
                 }
-                if(/^grunt-contrib/i.test(input)){
-                    return "By convention Grunt plugins starts with 'grunt-'";
+            }, {
+                type: 'checkbox',
+                name: 'license',
+                message: 'License',
+                default : 'MIT',
+                choices : ['MIT', 'GPL-3.0', 'GPL-2.0', 'AGPL-3.0', 'LGPL-3.0', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'MPL-2.0', 'Unlicense', 'Other']
                 }
-                return true;
-            },
-            filter : normalizeName
-        }, {
-            type: 'input',
-            name: 'description',
-            message: 'The plugin description',
-            default: 'The best Grunt plugin'
-        }, {
-            type: 'input',
-            name: 'version',
-            message: 'The plugin version',
-            default: '0.1.0'
-        }, {
-            type: 'list',
-            name: 'gruntVersion',
-            message: 'The version of Grunt',
-            default: '1.0.0',
-            choices : ['1.0.0', '0.4.5']
-        }]).then(function(answers) {
-            self.props = answers;
-            self.props.taskName = self.props.name.replace(/^grunt-/i, '');
+            }, {
+                type: 'boolean',
+                name: 'github',
+                message: 'Is your plugin hosted on Github ?',
+            }]).then(function(answers) {
+                self.props = answers;
+                self.props.taskName = self.props.name.replace(/^grunt-/i, '');
 
-            self.log('Creating grunt plugin ' + self.props.name);
-        });
+                self.log('Creating grunt plugin ' + self.props.name);
+            });
+        },
+        repoProps : function repoProps(){
+            var self = this;
+            return this.prompt([{
+                type: 'input',
+                name: 'name',
+                message: 'Your Grunt plugin name',
+                default: normalizeName(this.appname),
+                validate : function(input){
+                    if(/^grunt-contrib/i.test(input)){
+                        return "Hum, grunt-contrib plugins names are reserved for the Grunt core team, sorry";
+                    }
+                    if(/^grunt-contrib/i.test(input)){
+                        return "By convention Grunt plugins starts with 'grunt-'";
+                    }
+                    return true;
+                },
+                filter : normalizeName
+            }, {
+                type: 'input',
+                name: 'description',
+                message: 'The plugin description',
+                default: 'The best Grunt plugin'
+            }, {
+                type: 'input',
+                name: 'version',
+                message: 'The plugin version',
+                default: '0.1.0'
+            }, {
+                type: 'list',
+                name: 'gruntVersion',
+                message: 'The version of Grunt',
+                default: '1.0.0',
+                choices : ['1.0.0', '0.4.5']
+            }, {
+                type: 'input',
+                name: 'keywords',
+                message: 'Plugin keywords',
+                filter: function (words) {
+                    return words.split(/\s*,\s*/g);
+                }
+            }, {
+                type: 'boolean',
+                name: 'github',
+                message: 'Is your plugin hosted on Github ?',
+            }]).then(function(answers) {
+                self.props = answers;
+                self.props.taskName = self.props.name.replace(/^grunt-/i, '');
+
+                self.log('Creating grunt plugin ' + self.props.name);
+            });
+        }
     },
     writing: {
         packageJSON: function packageJSON() {
