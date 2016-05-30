@@ -48,7 +48,8 @@ module.exports = generators.Base.extend({
                 name: 'keywords',
                 message: 'Plugin keywords',
                 filter: function(input) {
-                    return ['gruntplugin'].concat(input.split(/\s*,\s*/g))
+                    var keywords = ['gruntplugin'].concat(input.split(/[\s,]+/g));
+                    return JSON.stringify(keywords);
                 }
             }, {
                 type: 'list',
@@ -80,7 +81,8 @@ module.exports = generators.Base.extend({
             return this.prompt([{
                 type: 'input',
                 name: 'githubName',
-                message: 'Your github psuedo ?',
+                message: 'Your github pseudo ?',
+                default : this.user.github.username()
                 when: this.props.github
             }]).then(function(answers) {
                 self.props.githubName = answers.githubName
@@ -152,12 +154,11 @@ module.exports = generators.Base.extend({
     },
 
     install: function install() {
-        //this.npmInstall();
+        this.npmInstall();
 
         if (this.props.gruntVersion !== '1.0.0') {
             this.log('Do not forget to run : npm install -g grunt-cli');
         }
-
     }
 });
 

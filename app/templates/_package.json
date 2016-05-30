@@ -3,7 +3,7 @@
   "version": "<%=version%>",
   "description": "<%=description%>",
   "author": "<%=authorName%> <<%=authorEmail%>>",
-  "keywords": [<%=(keywords && keywords.length) ? keywords : 'gruntplugin'%>],
+  "keywords": <%-keywords%>,
   "license": "<%=license%>",
   "main": "Gruntfile.js",
   "devDependencies": {
