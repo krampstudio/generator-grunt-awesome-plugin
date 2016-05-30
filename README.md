@@ -23,7 +23,7 @@ cd grunt-moo
 yo grunt-awesome-plugin
 ```
 
-
+![Generate a plugin](https://raw.githubusercontent.com/krampstudio/generator-grunt-awesome-plugin/master/assets/cli.png)
 
 ## History
 
