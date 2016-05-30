@@ -1,6 +1,6 @@
 var generators = require('yeoman-generator');
 
-var normalizeName = function normalizeName(name){
+var normalizeName = function normalizeName(name) {
     return name.replace(/\s/g, '-').toLowerCase();
 };
 
@@ -10,23 +10,23 @@ module.exports = generators.Base.extend({
         generators.Base.apply(this, arguments);
     },
     prompting: {
-        packageProps : function packageProps() {
+        packageProps: function packageProps() {
             var self = this;
             return this.prompt([{
                 type: 'input',
                 name: 'name',
                 message: 'Your Grunt plugin name',
                 default: normalizeName(this.appname),
-                validate : function(input){
-                    if(/^grunt-contrib/i.test(input)){
+                validate: function(input) {
+                    if (/^grunt-contrib/i.test(input)) {
                         return "Hum, grunt-contrib plugins names are reserved for the Grunt core team, sorry";
                     }
-                    if(/^grunt-contrib/i.test(input)){
+                    if (/^grunt-contrib/i.test(input)) {
                         return "By convention Grunt plugins starts with 'grunt-'";
                     }
                     return true;
                 },
-                filter : normalizeName
+                filter: normalizeName
             }, {
                 type: 'input',
                 name: 'description',
@@ -42,21 +42,30 @@ module.exports = generators.Base.extend({
                 name: 'gruntVersion',
                 message: 'The version of Grunt',
                 default: '1.0.0',
-                choices : ['1.0.0', '0.4.5']
+                choices: ['1.0.0', '0.4.5']
             }, {
                 type: 'input',
                 name: 'keywords',
                 message: 'Plugin keywords',
-                filter: function (words) {
-                    return words.split(/\s*,\s*/g);
+                filter: function(input) {
+                    return ['gruntplugin'].concat(input.split(/\s*,\s*/g))
                 }
             }, {
-                type: 'checkbox',
+                type: 'list',
                 name: 'license',
                 message: 'License',
-                default : 'MIT',
-                choices : ['MIT', 'GPL-3.0', 'GPL-2.0', 'AGPL-3.0', 'LGPL-3.0', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'MPL-2.0', 'Unlicense', 'Other']
-                }
+                default: 'MIT',
+                choices: ['MIT', 'GPL-3.0', 'GPL-2.0', 'AGPL-3.0', 'LGPL-3.0', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'MPL-2.0', 'Unlicense', 'Other']
+            }, {
+                type: 'input',
+                name: 'authorName',
+                message: 'Your name',
+                default: this.user.git.name(),
+            }, {
+                type: 'input',
+                name: 'authorEmail',
+                message: 'Your email',
+                default: this.user.git.email(),
             }, {
                 type: 'boolean',
                 name: 'github',
@@ -64,59 +73,17 @@ module.exports = generators.Base.extend({
             }]).then(function(answers) {
                 self.props = answers;
                 self.props.taskName = self.props.name.replace(/^grunt-/i, '');
-
-                self.log('Creating grunt plugin ' + self.props.name);
             });
         },
-        repoProps : function repoProps(){
+        repoProps: function repoProps() {
             var self = this;
             return this.prompt([{
                 type: 'input',
-                name: 'name',
-                message: 'Your Grunt plugin name',
-                default: normalizeName(this.appname),
-                validate : function(input){
-                    if(/^grunt-contrib/i.test(input)){
-                        return "Hum, grunt-contrib plugins names are reserved for the Grunt core team, sorry";
-                    }
-                    if(/^grunt-contrib/i.test(input)){
-                        return "By convention Grunt plugins starts with 'grunt-'";
-                    }
-                    return true;
-                },
-                filter : normalizeName
-            }, {
-                type: 'input',
-                name: 'description',
-                message: 'The plugin description',
-                default: 'The best Grunt plugin'
-            }, {
-                type: 'input',
-                name: 'version',
-                message: 'The plugin version',
-                default: '0.1.0'
-            }, {
-                type: 'list',
-                name: 'gruntVersion',
-                message: 'The version of Grunt',
-                default: '1.0.0',
-                choices : ['1.0.0', '0.4.5']
-            }, {
-                type: 'input',
-                name: 'keywords',
-                message: 'Plugin keywords',
-                filter: function (words) {
-                    return words.split(/\s*,\s*/g);
-                }
-            }, {
-                type: 'boolean',
-                name: 'github',
-                message: 'Is your plugin hosted on Github ?',
+                name: 'githubName',
+                message: 'Your github psuedo ?',
+                when: this.props.github
             }]).then(function(answers) {
-                self.props = answers;
-                self.props.taskName = self.props.name.replace(/^grunt-/i, '');
-
-                self.log('Creating grunt plugin ' + self.props.name);
+                self.props.githubName = answers.githubName
             });
         }
     },
@@ -146,21 +113,21 @@ module.exports = generators.Base.extend({
                 this.destinationPath('.eslintrc')
             );
         },
-        grunttask : function grunttask(){
+        grunttask: function grunttask() {
             this.fs.copyTpl(
                 this.templatePath('tasks/_task.js'),
                 this.destinationPath('tasks/' + this.props.taskName + '.js'),
                 this.props
             );
         },
-        gruntfile : function gruntfile(){
+        gruntfile: function gruntfile() {
             this.fs.copyTpl(
                 this.templatePath('_Gruntfile.js'),
                 this.destinationPath('Gruntfile.js'),
                 this.props
             );
         },
-        tests : function tests(){
+        tests: function tests() {
             this.fs.copy(
                 this.templatePath('test/data/sample-a.json'),
                 this.destinationPath('test/data/sample-a.json')
@@ -174,15 +141,23 @@ module.exports = generators.Base.extend({
                 this.destinationPath('test/' + this.props.taskName + '_spec.js'),
                 this.props
             );
+        },
+        readme : function readme(){
+            this.fs.copyTpl(
+                this.templatePath('_README.md'),
+                this.destinationPath('README.md'),
+                this.props
+            );
         }
     },
 
-    install : function install (){
-        this.npmInstall();
+    install: function install() {
+        //this.npmInstall();
 
-        if(this.props.gruntVersion !== '1.0.0'){
+        if (this.props.gruntVersion !== '1.0.0') {
             this.log('Do not forget to run : npm install -g grunt-cli');
         }
 
     }
 });
+

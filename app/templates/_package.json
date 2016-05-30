@@ -2,9 +2,9 @@
   "name": "<%=name%>",
   "version": "<%=version%>",
   "description": "<%=description%>",
-  "keywords": [
-    "gruntplugin"
-  ],
+  "author": "<%=authorName%> <<%=authorEmail%>>",
+  "keywords": [<%=(keywords && keywords.length) ? keywords : 'gruntplugin'%>],
+  "license": "<%=license%>",
   "main": "Gruntfile.js",
   "devDependencies": {
     "chai": "^3.5.0",
@@ -17,5 +17,15 @@
   },
   "scripts": {
     "test": "grunt test"
-  }
+  },
+<% if(github) { %>
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/<%=githubName%>/<%=name%>.git"
+  },
+  "bugs": {
+    "url": "https://github.com/<%=githubName%>/<%=name%>/issues"
+  },
+  "homepage": "https://github.com/<%=githubName%>/<%=name%>#readme"
+<% } %>
 }
