@@ -1,15 +1,34 @@
+/**
+ * The Grunt plugin generator
+ * @author Bertrand Chevrier <chevrier.bertrand@gmail.com>
+ * @license MIT
+ */
+
 var generators = require('yeoman-generator');
 
+/**
+ * Normalize the name from "Grunt Moo" to "grunt-moo"
+ */
 var normalizeName = function normalizeName(name) {
     return name.replace(/\s/g, '-').toLowerCase();
 };
 
+/**
+ * @see http://yeoman.io
+ */
 module.exports = generators.Base.extend({
-    constructor: function() {
 
+    constructor: function() {
         generators.Base.apply(this, arguments);
     },
+
+    /**
+     * Prompt step, ask the user for details
+     * @see https://github.com/SBoudrias/Inquirer.js for the prompt function syntax
+     */
     prompting: {
+
+        //all properties usefull to the package.json
         packageProps: function packageProps() {
             var self = this;
             return this.prompt([{
@@ -76,19 +95,25 @@ module.exports = generators.Base.extend({
                 self.props.taskName = self.props.name.replace(/^grunt-/i, '');
             });
         },
+
+        //specific to the repository, need to know if we use github before
         repoProps: function repoProps() {
             var self = this;
             return this.prompt([{
                 type: 'input',
                 name: 'githubName',
                 message: 'Your github pseudo ?',
-                default : this.user.github.username()
                 when: this.props.github
             }]).then(function(answers) {
                 self.props.githubName = answers.githubName
             });
         }
     },
+
+    /**
+     * Create the file sytem, by either copying or using templates
+     * @see http://www.embeddedjs.com/ for the template syntax
+     */
     writing: {
         packageJSON: function packageJSON() {
             this.fs.copyTpl(
@@ -153,12 +178,17 @@ module.exports = generators.Base.extend({
         }
     },
 
+    /**
+     * Install and setup step
+     */
     install: function install() {
         this.npmInstall();
 
         if (this.props.gruntVersion !== '1.0.0') {
             this.log('Do not forget to run : npm install -g grunt-cli');
         }
+
+        this.log('Here we go! Your plugin is ready to use!');
     }
 });
 

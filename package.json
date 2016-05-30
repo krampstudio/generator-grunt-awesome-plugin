@@ -15,7 +15,8 @@
     "generator",
     "grunt",
     "gruntplugin",
-    "yo"
+    "yo",
+    "grunt"
   ],
   "author": "Bertrand Chevrier <chevrier.bertrand@gmail.com>",
   "license": "MIT",
