@@ -24,7 +24,7 @@ In your project's Gruntfile, add a section named `<%=taskName%>` to the data obj
 
 ```js
 grunt.initConfig({
-  foodfact: {
+  '<%=taskName%>': {
     options: {
         foo : true
     },
